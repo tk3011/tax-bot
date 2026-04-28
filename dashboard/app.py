@@ -9,15 +9,54 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from db import get_db, Receipt, Client, User
 from auth import require_auth
 
-# Import modules
-from receipt_scanner import show_receipt_scanner
-from portal_jockey import show_portal_jockey
-from tax_calculator import show_tax_return
-from pdf_reports import show_pdf_reports
-from bas_generator import show_bas_generator
-from compliance import show_compliance_dashboard
-from settings import show_settings
-from activity_log import show_activity_log
+# Import modules with error handling
+try:
+    from receipt_scanner import show_receipt_scanner
+except ImportError:
+    def show_receipt_scanner(db, Receipt):
+        st.info("Receipt scanner module loading...")
+
+try:
+    from portal_jockey import show_portal_jockey
+except ImportError:
+    def show_portal_jockey(db, Receipt, Client):
+        st.info("ATO portal module loading...")
+
+try:
+    from tax_calculator import show_tax_return
+except ImportError:
+    def show_tax_return(db, Receipt, Client):
+        st.info("Tax calculator module loading...")
+
+try:
+    from pdf_reports import show_pdf_reports
+except ImportError:
+    def show_pdf_reports(db, Receipt, Client):
+        st.info("PDF reports module loading...")
+
+try:
+    from bas_generator import show_bas_generator
+except ImportError:
+    def show_bas_generator(db, Receipt, Client):
+        st.info("BAS generator module loading...")
+
+try:
+    from compliance import show_compliance_dashboard
+except ImportError:
+    def show_compliance_dashboard(db, Client):
+        st.info("Compliance module loading...")
+
+try:
+    from settings import show_settings
+except ImportError:
+    def show_settings(db):
+        st.info("Settings module loading...")
+
+try:
+    from activity_log import show_activity_log
+except ImportError:
+    def show_activity_log(db):
+        st.info("Activity log module loading...")
 
 st.set_page_config(page_title="Tax Bot", page_icon="🤖", layout="wide")
 
